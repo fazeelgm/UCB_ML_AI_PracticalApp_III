@@ -7,3 +7,4 @@
 
 ## Articles
 * Why scikit-learn isn’t the Best for Visualizing Decision Trees: Meet dtreeviz | [Link](https://pub.towardsai.net/mathematical-transformations-in-feature-engineering-log-reciprocal-and-power-transforms-5d7a3b7146ac](https://pub.towardsai.net/why-scikit-learn-isnt-the-best-for-visualizing-decision-trees-meet-dtreeviz-30c7997a7bd2))
+  * dtreeviz 2.2.2  |  [Link](https://pypi.org/project/dtreeviz/#description)

@@ -6,6 +6,7 @@
   * Available in the `misc` [Link](https://github.com/fazeelgm/UCB_ML_AI_PracticalApp_III/tree/main/misc) folder
 
 ## Articles
-* Why scikit-learn isn’t the Best for Visualizing Decision Trees: Meet dtreeviz | [Link](https://pub.towardsai.net/mathematical-transformations-in-feature-engineering-log-reciprocal-and-power-transforms-5d7a3b7146ac](https://pub.towardsai.net/why-scikit-learn-isnt-the-best-for-visualizing-decision-trees-meet-dtreeviz-30c7997a7bd2))
+* Terence Parr, Prince Grover: How to visualize decision trees  |  [Link](https://explained.ai/decision-tree-viz/index.html)
   * dtreeviz 2.2.2  |  [Link](https://pypi.org/project/dtreeviz/#description)
   * dtreeviz github |  [Link](https://github.com/parrt/dtreeviz)
+* Why scikit-learn isn’t the Best for Visualizing Decision Trees: Meet dtreeviz | [Link](https://pub.towardsai.net/mathematical-transformations-in-feature-engineering-log-reciprocal-and-power-transforms-5d7a3b7146ac](https://pub.towardsai.net/why-scikit-learn-isnt-the-best-for-visualizing-decision-trees-meet-dtreeviz-30c7997a7bd2))

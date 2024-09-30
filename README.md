@@ -241,9 +241,7 @@ pdays < 0.01
 euribor3m < 0.02
 nr.employed < 0.47
 ```
-<a href="https://raw.githubusercontent.com/fazeelgm/UCB_ML_AI_PracticalApp_III/images/decision_dtreeviz_row_4058.svg" target="_blank">
-  ![Alt text](https://raw.githubusercontent.com/fazeelgm/UCB_ML_AI_PracticalApp_III/images/decision_dtreeviz_row_4058.svg)
-</a>
+<a href="images/decision_dtreeviz_row_4058.svg" target="_blank"></a>
 <br>
 <a href="https://raw.githubusercontent.com/fazeelgm/UCB_ML_AI_PracticalApp_III/images/decision_dtreeviz_row_4058.svg" target="_blank">Link to FULL TREE</a>
 

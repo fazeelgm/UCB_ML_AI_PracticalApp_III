@@ -184,14 +184,66 @@ param_grid = {
 ```
 It takes over 8 hours to perform grid search on the full dataset so the smaller dataset was used during hyperparameter tuning.
 
-Optimizations during the tuning cycles:
+Optimizations performed during the tuning cycles:
 
 * Switch to `MinMaxScaler` from `StandardScaler`
 * Tuned `max_iter`, `C`, `kernel` and `degree` parameters based on results
 * `LogisticRegression`: switched to `class_weight=balanced`
 
-  
+## Evaluation
+
+**Metrics**
+1. Accuracy: Proportion of correctly predicted instances (both positive and negative) out of the total instances in the dataset
+2. Precision: Proportion of positive predictions that are actually correct
+3. Recall: Proportion of actual positives that are correctly identified by the model
+4. F1-score: The harmonic mean of precision and recall, providing a single metric that balances both
+5. ROC-AUC score: The performance of a classifier across different threshold values
+6. Confusion Matrix: Summary of the prediction results by showing the counts of true positive (TP), true negative (TN), false positive (FP), and false negative (FN) classifications
+
+### Key Findings
+
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure 5: Tuned (optimized) Model Results</em><img src="images/table_models_tuned.png" border="0"/></td>
 </tr></table>
 
+1. `SVC` performed better than all the other models this time, but took drastically longer to train. It had the highest F1 score on an impbalanced `y` distribution, and balanced both the Precision and Recall scores
+2. `LogisticRegresssion` had the highest AUC score with high recall, classifying the most successfull campaigns correctly (884) and quickly
+3. `DecisionTreeClassifier` had the fastest training time with reasonable scores on AUC and F1 and balanced the time vs score criteria well
+4. `KNeighborsClassifier`  did reasonaly well with moderate training time and the higest precision score
+
+<table style="width:100%"><tr>
+  <td width="50%"><img src="images/confusion_matrices.png" border="0"/><em>Figure 6: Confusion Matrices</em></td>
+  <td width="50%">
+    <img src="images/roc_curves.png" border="0"/><em>Figure 7: ROC/AUC Curves</em>
+    <br><br><br>
+    &nbsp;&nbsp;&nbsp;
+    <img src="images/feature_importances.png" border="0"/><em>Figure 8: Feature Importances</em>
+  </td>
+</tr></table>
+
+### Model Interpretation and Reccomendations
+
+Looking at the above Feature Importances from the two models that support it, we see that each tuned model gives different weight to the features. Decision trees are easy to interpret and show how the model came to its _decision_ for individual samples. Our tuned `DecisionTreeClassifier` was able to achieve the highest 93.46% accuracy on the training data, with allocated `max_depth=10`, out of the tuned models (likely a little over-fitted). Though it didn't score the best, but it's still instructive to visually see how it came to this.
+
+We investigated two different methods for plotting the decicions tree to understand the output, as it is a good way to explain the prediction path to the customer and this will help them design better campaigns in the future:
+
+* SciKit-learn DecisionTreeClassifier [Link to full tree](images/decision_tree.png)
+* Dtreeviz Library [Link to full tree](images/decision_dtreeviz.svg)
+
+Here we show full decision tree from our optimized model, as we well as the prediction path for the individual 4,058th sample from our dataset that the model used to classify it as a Success (`yes`):
+```
+0.29 <= age 
+0.5 <= month 
+day_of_week < 0.38
+duration < 0.04
+campaign < 0.03
+pdays < 0.01
+euribor3m < 0.02
+nr.employed < 0.47
+```
+
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure 9: Prediction path for the 4,058th sample </em><img width=800px height=600px src="images/decision_dtreeviz_row_4058.svg" border="0"/></td>
+</tr></table>
+
+[ ![](images/decision_dtreeviz_row_4058.svg) ](images/decision_dtreeviz_row_4058.svg)

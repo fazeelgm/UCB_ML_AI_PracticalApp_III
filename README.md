@@ -251,5 +251,11 @@ nr.employed < 0.47
 Since we don't get the individual feature importance from all our models, we now calculate the Permutation Importance to measure the change in our model's performace when a feature value is randomly shuffled to see how much the model relies on that feature for its predictions. This will help us determine collinearity between features not captured by the model cofficients and evaluate the impact of changing the feature on the model performance.
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure 10: Permutation Importance</em><img src="images/decision_dtreeviz_row_4058_snippet.png" border="0"/></td>
+  <td width="100%"><em>Figure 10: Permutation Importance</em><img src="images/permutation_importance.png" border="0"/></td>
 </tr></table>
+
+Based on these importances and what we learned from inidividual models, we can make the following recommendations to improve future campaigns:
+
+1. There is a strong correlation between the call `duration` including previous call metrics (`pdays`, `month`, `contact`, and the lieklihood of acceptance of the offer, therefore we should try to enage the customer and extend the conversation as much as possible. This could be either by offering increasing rewards or understanding the reason they are not accepting the current offer
+2. The socio-economic attributes (`euribor3m`,`cons.price.idx`, `nr.employed`) are impacting the predictions so there is a need to have this external data available for selecting the target customer segments for the campaigns
+3. Since multiple models scored above 90% accuracy, we have high confidence of success if we can target the campaigns to similiar customers with around 10% conversion

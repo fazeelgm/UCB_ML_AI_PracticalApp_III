@@ -221,7 +221,7 @@ Optimizations performed during the tuning cycles:
   </td>
 </tr></table>
 
-### Model Interpretation and Reccomendations
+### Model Interpretation
 
 Looking at the above Feature Importances from the two models that support it, we see that each tuned model gives different weight to the features. Decision trees are easy to interpret and show how the model came to its _decision_ for individual samples. Our tuned `DecisionTreeClassifier` was able to achieve the highest 93.46% accuracy on the training data, with allocated `max_depth=10`, out of the tuned models (likely a little over-fitted). Though it didn't score the best, but it's still instructive to visually see how it came to this.
 
@@ -243,5 +243,13 @@ nr.employed < 0.47
 ```
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure 9: Prediction path for the 4,058th sample</em><img width=800px height=600px src="images/decision_dtreeviz_row_4058_snippet.png" border="0"/></td>
+  <td width="100%"><em>Figure 9: Prediction path for the 4,058th sample</em><img src="images/decision_dtreeviz_row_4058_snippet.png" border="0"/></td>
+</tr></table>
+
+### Recommendations
+
+Since we don't get the individual feature importance from all our models, we now calculate the Permutation Importance to measure the change in our model's performace when a feature value is randomly shuffled to see how much the model relies on that feature for its predictions. This will help us determine collinearity between features not captured by the model cofficients and evaluate the impact of changing the feature on the model performance.
+
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure 10: Permutation Importance</em><img src="images/decision_dtreeviz_row_4058_snippet.png" border="0"/></td>
 </tr></table>

@@ -230,7 +230,7 @@ We investigated two different methods for plotting the decicions tree to underst
 * SciKit-learn DecisionTreeClassifier [Link to full tree](images/decision_tree.png)
 * Dtreeviz Library [Link to full tree](images/decision_dtreeviz.svg)
 
-Here we show full decision tree from our optimized model, as we well as the prediction path for the individual 4,058th sample from our dataset that the model used to classify it as a Success (`yes`):
+Here we show the partial decision tree from our optimized model, as we well as the prediction path for the individual 4,058th sample from our dataset that the model used to classify it as a Success (`yes`):
 ```
 0.29 <= age 
 0.5 <= month 
@@ -241,9 +241,8 @@ pdays < 0.01
 euribor3m < 0.02
 nr.employed < 0.47
 ```
+<a href="images/decision_dtreeviz_row_4058.svg" target="_blank">Link to FULL TREE</a>
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure 9: Prediction path for the 4,058th sample </em><img width=800px height=600px src="images/decision_dtreeviz_row_4058_snippet.png" border="0"/></td>
+  <td width="100%"><em>Figure 9: Prediction path for the 4,058th sample</em><img width=800px height=600px src="images/decision_dtreeviz_row_4058_snippet.png" border="0"/></td>
 </tr></table>
-
-[ ![](images/decision_dtreeviz_row_4058_snippet.png) ](images/decision_dtreeviz_row_4058.svg)

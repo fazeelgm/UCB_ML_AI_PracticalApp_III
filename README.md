@@ -9,7 +9,7 @@ Fazeel Mufti
 **Resources**
 
 * Moro, S., Rita, P., & Cortez, P. (2014). [Bank Marketing Dataset](https://doi.org/10.24432/C5K306). UCI Machine Learning Repository
-  * [Accompanying Paper](CRISP-DM-BANK.pdf)
+  * [Accompanying Paper](misc/CRISP-DM-BANK.pdf)
 
 * `data/bank-additional-full.csv`: Full dataset for 41,188 campaign calls
 * `data/bank-additional.csv`: Randomly sampled partial dataset with 4,119 campaign calls
@@ -227,7 +227,7 @@ Looking at the above Feature Importances from the two models that support it, we
 
 We investigated two different methods for plotting the decicions tree to understand the output, as it is a good way to explain the prediction path to the customer and this will help them design better campaigns in the future:
 
-* SciKit-learn DecisionTreeClassifier [Link to full tree -> Right Click Open In New Window]("images/decision_dtree.png")
+* SciKit-learn DecisionTreeClassifier [Link to full tree -> Right Click Open In New Window](images/decision_dtree.png)
 * Dtreeviz Library [Link to full tree -> Right Click Open In New Window]("images/decision_dtreeviz.svg")
 
 Here we show the partial decision tree from our optimized model, as we well as the prediction path for the individual 4,058th sample from our dataset that the model used to classify it as a Success (`yes`):

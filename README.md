@@ -227,8 +227,8 @@ Looking at the above Feature Importances from the two models that support it, we
 
 We investigated two different methods for plotting the decicions tree to understand the output, as it is a good way to explain the prediction path to the customer and this will help them design better campaigns in the future:
 
-* SciKit-learn DecisionTreeClassifier [Link to full tree](images/decision_tree.png)
-* Dtreeviz Library [Link to full tree](images/decision_dtreeviz.svg)
+* SciKit-learn DecisionTreeClassifier [Link to full tree](https://raw.githubusercontent.com/fazeelgm/UCB_ML_AI_PracticalApp_III/9c7e93d1b8057987d3dd99801472d1be5c680e28/images/decision_dtree.png?token=BIHAS6NVYZJMKJZQZQMU5BTG7IV4C)
+* Dtreeviz Library [Link to full tree](https://raw.githubusercontent.com/fazeelgm/UCB_ML_AI_PracticalApp_III/9c7e93d1b8057987d3dd99801472d1be5c680e28/images/decision_dtreeviz_row_4058.svg?token=BIHAS6NVYZJMKJZQZQMU5BTG7IV4C)
 
 Here we show the partial decision tree from our optimized model, as we well as the prediction path for the individual 4,058th sample from our dataset that the model used to classify it as a Success (`yes`):
 ```

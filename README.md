@@ -12,7 +12,7 @@ Fazeel Mufti
   * [Accompanying Paper](CRISP-DM-BANK.pdf)
 
 * `data/bank-additional-full.csv`: Full dataset for 41,188 campaign calls
-* `data/bank-additional.csv`: Randomly sampled partial dataset with 4,118 campaign calls
+* `data/bank-additional.csv`: Randomly sampled partial dataset with 4,119 campaign calls
 * `MarketingCampaignCaseStudy.ipynb`: Jupyter notebook containing the Marketing Campaign Case Study for Classifier Comparisons
 
 ## Context
@@ -22,7 +22,7 @@ using a public dataset from the UCI Machine Learning repository [link](https://a
 The data is from a Portugese banking institution and is a collection of results from 17 Direct Marketing (DM) phone 
 campaigns conducted by a Portugese Bank (Customer) between 
 May 2008 and November 2010, corressponding to 79,354 contacts, who were offered attractive, long-term deposit applications. 
-We will make use of the information provided by the authors in their paper accompanying the dataset [here](CRISP-DM-BANK.pdf) on how
+We will make use of the information provided by the authors in their paper accompanying the dataset [here](misc/CRISP-DM-BANK.pdf) on how
 they improved the dataset and features that were important in their model training. 
 
 We will use the following **Methodlogy**:
@@ -80,6 +80,170 @@ been provided showing whether the offer was accepted or not, i.e. was the capaig
 **Target Variable**
 21. y - has the client subscribed a term deposit? (binary: 'yes','no')
 
-
 ## Expoloratory Data Analysis
 
+> **Note**: Please refer to the [`MarketingCampaignCaseStudy.ipynb`](MarketingCampaignCaseStudy.ipynb) for detailed work that is being presented in summary format here.
+
+### Data Analysis
+
+1. Figure 1: Overall feature inspection
+   * The data was relatively clean - No missing or null values were discovered
+   * Overall distributions look reasonable - we can't exclude anything at this stage as it may be relevant for modeling
+   * Some data concerns that we can note for now and may have to come back to them:
+     * `unknown` values for `marital`, `default`, `housing` and `loan` columns: We ignored them for now, but if these features are important during modeling, these missing values can be treated as a possible class label or using deletion or imputation techniques. This is specially concerning for `default` cases where the `unknown` value is significant
+     * `pdays` distribution shows that majority of the resepondents were not previously contacted (999), so this may be a red flag for removing this column
+1. Figure 2: The target variable `y` was not much of a concern with respect to outliers since this is a binary classification problem
+2. Figure 3: Performed Correlation analysis after `OrdinalEncoder` was used to encode categorical features to see inter-feature relationships
+   * Most of the data seems to have reasonable correlations to the target `y` variable with `duration` and `previous` values of last call with customer showing strong positive relation to success (`y` = `yes`)
+   * It was deemed too early to eliminate any features till we get preliminary results from our models
+
+<table style="width:100%"><tr>
+  <td width="60%"><img src="images/feature_distributions.png" border="0"/><em>Figure 1: Feature Distributions</em></td>
+  <td width="40%">
+    <img src="images/pie-acceptance-overall.png" border="0"/><em>Figure 2: Target Distribution</em>
+    <br><br><br>
+    &nbsp;&nbsp;&nbsp;
+    <img src="images/heatmap_cmatrix.png" border="0"/><em>Figure 3: Correlation Matrix</em>
+  </td>
+</tr></table>
+
+### Feature Engineering
+
+Next, we prepared the data for modeling:
+
+1. The data was split into training and validation sets using an 80/20 split with stratification over the target `y`
+2. From this point on, we use the same `random_state` for all data and models to reduce shuffling artifacts from run-to-run
+3. The data was scaled using `StandardScaler` for the initial runs
+
+## Model Development
+
+### Baseline & Default Models
+
+Before we build our first model, we want to establish a baseline. We used the Scikit ML Library provided `DummyClassifier` with `strategy='uniform'` to make _untrained_ predictions with equal probability among the two possible classes: Successful and Unsuccessful, without taking any of the campaign features into account. As expected, the predictions from the DummyClassifier (Figure 4) are about as good as a coin toss, and this is the baseline score for our business use case!
+
+We next proceeded to benchmark the performance of the Logistic Regression, KNN algorithm, Decision Tree and SVM models by using the default settings of the models to fit and score each one:
+
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure 4: Default Model Results</em><img src="images/table_models_defaults.png" border="0"/></td>
+</tr></table>
+
+We can now compare the results from all our base Models! 
+
+* All our models did much better than the 50% baseline of the `DummyClassifier`
+* `LogisticRegression` performed the best with the highest Test Accuracy Score on the validation data, i.e. after being trained on the training data, how it did against the held-out test dataset in correctly predicting the offer acceptance (both positive and negative) across all calls (also shown by the highest AUC score). It was also the fastest to train and overall is a good candidate for using this as the final model
+* `SVC` came in second, but took almost an order of magnitude longer to train with a marginal improvement over `LogisticRegression`
+* Both `DecisionTreeClassifier` and `KNeighborsClassifier` were close in Test Accuracy and were faster than `LogisticRegression` but had lower AUC scores
+* `DecisionTreeClassifier` did the best out of all models in correctly classifying the most positive results (TP)
+* Overall, all four models were relatively comaparable with no standouts for elimination at this point
+
+### Model Tuning
+
+We now want to try to improve the above results by:
+
+* More feature engineering and exploration
+* Hyperparameter tuning to optimze the models based on our EDA above
+* Use `GridSearchCV` to optimize the hyperparameters of our models get the best results on the training dataset:
+* We used 5-fold cross-validation for all models with the following model and param_grid definitions:
+```
+# Define the models to be tuned
+models = {
+    'LogisticRegression': LogisticRegression(max_iter=1000, class_weight='balanced'),
+    'KNeighborsClassifier': KNeighborsClassifier(),
+    'DecisionTreeClassifier': DecisionTreeClassifier(),
+    'SVC': SVC(probability=True, max_iter=10000)
+}
+
+# Define the hyperparameters to test
+param_grid = {
+    'LogisticRegression': {
+        'C': [0.01, 0.1, 1, 10],
+        'penalty': ['l1', 'l2'],
+        'solver': ['liblinear', 'saga'],
+    },
+    
+    'KNeighborsClassifier': {
+        'n_neighbors': [3, 5, 7, 9, 11],
+        'weights': ['uniform', 'distance'],
+        'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute']
+    },
+    
+    'DecisionTreeClassifier': {
+        'criterion': ['gini', 'entropy'],
+        'max_depth': [None, 10, 20, 30],
+        'min_samples_split': [2, 5, 10],
+        'min_samples_leaf': [1, 2, 4]
+    },
+    
+    'SVC': {
+        'C': np.logspace(-3, 4, 5).round(4),
+        'kernel': ['linear', 'poly', 'rbf'],
+        'degree': [1, 3],    # For poly only - 5 didn't win
+        'gamma': ['scale', 'auto'],
+    }
+}
+```
+It takes over 8 hours to perform grid search on the full dataset so the smaller dataset was used during hyperparameter tuning.
+
+Optimizations performed during the tuning cycles:
+
+* Switch to `MinMaxScaler` from `StandardScaler`
+* Tuned `max_iter`, `C`, `kernel` and `degree` parameters based on results
+* `LogisticRegression`: switched to `class_weight=balanced`
+
+## Evaluation
+
+**Metrics**
+1. Accuracy: Proportion of correctly predicted instances (both positive and negative) out of the total instances in the dataset
+2. Precision: Proportion of positive predictions that are actually correct
+3. Recall: Proportion of actual positives that are correctly identified by the model
+4. F1-score: The harmonic mean of precision and recall, providing a single metric that balances both
+5. ROC-AUC score: The performance of a classifier across different threshold values
+6. Confusion Matrix: Summary of the prediction results by showing the counts of true positive (TP), true negative (TN), false positive (FP), and false negative (FN) classifications
+
+### Key Findings
+
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure 5: Tuned (optimized) Model Results</em><img src="images/table_models_tuned.png" border="0"/></td>
+</tr></table>
+
+1. `SVC` performed better than all the other models this time, but took drastically longer to train. It had the highest F1 score on an impbalanced `y` distribution, and balanced both the Precision and Recall scores
+2. `LogisticRegresssion` had the highest AUC score with high recall, classifying the most successfull campaigns correctly (884) and quickly
+3. `DecisionTreeClassifier` had the fastest training time with reasonable scores on AUC and F1 and balanced the time vs score criteria well
+4. `KNeighborsClassifier`  did reasonaly well with moderate training time and the higest precision score
+
+<table style="width:100%"><tr>
+  <td width="50%"><img src="images/confusion_matrices.png" border="0"/><em>Figure 6: Confusion Matrices</em></td>
+  <td width="50%">
+    <img src="images/roc_curves.png" border="0"/><em>Figure 7: ROC/AUC Curves</em>
+    <br><br><br>
+    &nbsp;&nbsp;&nbsp;
+    <img src="images/feature_importances.png" border="0"/><em>Figure 8: Feature Importances</em>
+  </td>
+</tr></table>
+
+### Model Interpretation and Reccomendations
+
+Looking at the above Feature Importances from the two models that support it, we see that each tuned model gives different weight to the features. Decision trees are easy to interpret and show how the model came to its _decision_ for individual samples. Our tuned `DecisionTreeClassifier` was able to achieve the highest 93.46% accuracy on the training data, with allocated `max_depth=10`, out of the tuned models (likely a little over-fitted). Though it didn't score the best, but it's still instructive to visually see how it came to this.
+
+We investigated two different methods for plotting the decicions tree to understand the output, as it is a good way to explain the prediction path to the customer and this will help them design better campaigns in the future:
+
+* SciKit-learn DecisionTreeClassifier [Link to full tree](images/decision_tree.png)
+* Dtreeviz Library [Link to full tree](images/decision_dtreeviz.svg)
+
+Here we show full decision tree from our optimized model, as we well as the prediction path for the individual 4,058th sample from our dataset that the model used to classify it as a Success (`yes`):
+```
+0.29 <= age 
+0.5 <= month 
+day_of_week < 0.38
+duration < 0.04
+campaign < 0.03
+pdays < 0.01
+euribor3m < 0.02
+nr.employed < 0.47
+```
+
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure 9: Prediction path for the 4,058th sample </em><img width=800px height=600px src="images/decision_dtreeviz_row_4058.svg" border="0"/></td>
+</tr></table>
+
+[ ![](images/decision_dtreeviz_row_4058.svg) ](images/decision_dtreeviz_row_4058.svg)

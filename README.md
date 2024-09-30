@@ -243,7 +243,7 @@ nr.employed < 0.47
 ```
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure 9: Prediction path for the 4,058th sample </em><img width=800px height=600px src="images/decision_dtreeviz_row_4058.svg" border="0"/></td>
+  <td width="100%"><em>Figure 9: Prediction path for the 4,058th sample </em><img width=800px height=600px src="images/decision_dtreeviz_row_4058_snippet.png" border="0"/></td>
 </tr></table>
 
-[ ![](images/decision_dtreeviz_row_4058.svg) ](images/decision_dtreeviz_row_4058.svg)
+[ ![](images/decision_dtreeviz_row_4058_snippet.png) ](images/decision_dtreeviz_row_4058.svg)

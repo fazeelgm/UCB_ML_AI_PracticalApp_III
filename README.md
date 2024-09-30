@@ -243,7 +243,9 @@ nr.employed < 0.47
 ```
 <a href="https://raw.githubusercontent.com/fazeelgm/UCB_ML_AI_PracticalApp_III/images/decision_dtreeviz_row_4058.svg" target="_blank">
   ![Alt text](https://raw.githubusercontent.com/fazeelgm/UCB_ML_AI_PracticalApp_III/images/decision_dtreeviz_row_4058.svg)
-</a><a href="https://raw.githubusercontent.com/fazeelgm/UCB_ML_AI_PracticalApp_III/images/decision_dtreeviz_row_4058.svg" target="_blank">Link to FULL TREE</a>
+</a>
+<br>
+<a href="https://raw.githubusercontent.com/fazeelgm/UCB_ML_AI_PracticalApp_III/images/decision_dtreeviz_row_4058.svg" target="_blank">Link to FULL TREE</a>
 
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure 9: Prediction path for the 4,058th sample</em><img width=800px height=600px src="images/decision_dtreeviz_row_4058_snippet.png" border="0"/></td>

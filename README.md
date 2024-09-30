@@ -241,7 +241,7 @@ pdays < 0.01
 euribor3m < 0.02
 nr.employed < 0.47
 ```
-<a href="images/decision_dtreeviz_row_4058.svg" target="_blank">Link to FULL TREE</a>
+<a href="https://raw.githubusercontent.com/fazeelgm/UCB_ML_AI_PracticalApp_III/9c7e93d1b8057987d3dd99801472d1be5c680e28/images/decision_dtreeviz_row_4058.svg" target="_blank">Link to FULL TREE</a>
 
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure 9: Prediction path for the 4,058th sample</em><img width=800px height=600px src="images/decision_dtreeviz_row_4058_snippet.png" border="0"/></td>

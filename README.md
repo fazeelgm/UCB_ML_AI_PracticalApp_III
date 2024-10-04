@@ -147,9 +147,8 @@ We can now compare the results from all our base Models!
 
 * All our models did much better than the 50% baseline of the `DummyClassifier`
 * `LogisticRegression` performed the best with the highest Test Accuracy Score on the validation data, i.e. after being trained on the training data, how it did against the held-out test dataset in correctly predicting the offer acceptance (both positive and negative) across all calls (also shown by the highest AUC score). It was also the fastest to train and overall is a good candidate for using this as the final model
-* `SVC` came in second, but took almost an order of magnitude longer to train with a marginal improvement over `LogisticRegression`
+* `SVC` came in second, but took almost an order of magnitude longer to train with a marginal improvement over `LogisticRegression`. However, `SVC` scored the highest on the AUC score, showing a better balance among true positive and negative classification.
 * Both `DecisionTreeClassifier` and `KNeighborsClassifier` were close in Test Accuracy and were faster than `LogisticRegression` but had lower AUC scores
-* `DecisionTreeClassifier` did the best out of all models in correctly classifying the most positive results (TP)
 * Overall, all four models were relatively comaparable with no standouts for elimination at this point
 
 ### Model Tuning
@@ -214,10 +213,15 @@ Optimizations performed during the tuning cycles:
   <td width="100%"><em>Figure 5: Tuned (optimized) Model Results</em><img src="images/table_models_tuned.png" border="0"/></td>
 </tr></table>
 
-1. `SVC` performed better than all the other models this time with a 91% accuracy, but took drastically longer to train. It had the highest F1 score on an impbalanced `y` distribution, suggesting a good balance on both the Precision and Recall scores
-2. `LogisticRegresssion` had the highest AUC score with high recall, classifying the most successfull campaigns correctly (884) and quickly
-3. `DecisionTreeClassifier` had the fastest training time with reasonable scores on AUC and F1 and balanced the time vs score criteria well
-4. `KNeighborsClassifier`  did reasonaly well with moderate training time and the higest precision score
+1. `SVC` and `DecisionTreeClassifier` performed better than the other models this time with a 91% accuracy, but `SVC` came in with a higher AUC score so it has a lit bit of an edge from a classfication perspective
+2. However, `SVC` took drastically longer to train, so this is a concern for using this model.
+1. `DecisionTreeClassifier` had the highest F1 score on an impbalanced `y` distribution, suggesting a good balance on both the Precision and Recall scores. It also had the fastest training time with reasonable scores on AUC and F1 and balanced the time vs score criteria well
+1. `LogisticRegresssion` had the highest AUC score with high recall, classifying the most successfull campaigns correctly (835) and quickly
+1. `KNeighborsClassifier` did reasonaly well with moderate training time and the higest precision score
+
+### Model Interpretation
+
+We now shift our focus to interpreting the results from comparisons and understand the weighting of our training features on campaign success. We analyzed each model in more detail on the basis of our evaluation metrics mentioned above:
 
 <table style="width:100%"><tr>
   <td width="50%"><img src="images/confusion_matrices.png" border="0"/><em>Figure 6: Confusion Matrices</em></td>
@@ -229,9 +233,9 @@ Optimizations performed during the tuning cycles:
   </td>
 </tr></table>
 
-### Model Interpretation
+As we have already discussed that the top models perfromed very similarly and this is shown in their correct classification results (confusion matrices). Their relative perfromances during tuning across various hyperparameter thresholds as shown by the AUC graphs, shows us that we were able to get the best parameters for each given our data.
 
-Looking at the above Feature Importances from the two models that provide this information, we see that each tuned model gives different weight to individual features. Decision trees are easy to interpret and show how the model came to its _decision_ for individual samples. Our tuned `DecisionTreeClassifier` was able to achieve the highest 93.46% accuracy on the training data, with allocated `max_depth=10`, out of the tuned models (likely a little over-fitted). Though it didn't score the best, but it's still instructive to visually see how it came to this.
+Looking at the above Feature Importances from the two models that provide this information, `LogisticRegresssion` and `DecisionTreeClassifier`, we see that each tuned model gives different weight to individual features. Decision trees are easy to interpret and show how the model came to its _decision_ for individual samples. Our tuned `DecisionTreeClassifier` was able to achieve the highest 93.46% accuracy on the training data, with allocated `max_depth=10`, out of the tuned models (likely a little over-fitted). Due to its overall performance and best time to train, it is instructive to visually see how it came decide on it's decision matrix.
 
 We investigated two different methods for plotting the resulting decision tree to understand the output, as it is a good way to explain the prediction path to the customer and this will help them design better campaigns in the future:
 
